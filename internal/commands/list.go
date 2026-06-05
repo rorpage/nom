@@ -95,10 +95,13 @@ func (m *model) UpdateList() tea.Cmd {
 func sortList(m model) func() tea.Msg {
 	return func() tea.Msg {
 		// reverse sorting order
-		if m.commands.config.Ordering == constants.AscendingOrdering {
+		switch m.commands.config.Ordering {
+		case constants.AscendingOrdering:
 			m.commands.config.Ordering = constants.DescendingOrdering
-		} else {
+		case constants.DescendingOrdering:
 			m.commands.config.Ordering = constants.AscendingOrdering
+		default:
+			// noop
 		}
 
 		items, err := m.commands.GetAllFeeds()

@@ -257,15 +257,21 @@ func (sls *SQLiteStore) upsertItem(db statementPreparer, item *Item) error {
 // TODO: pagination
 func (sls SQLiteStore) GetAllItems(ordering string) ([]Item, error) {
 	itemStmt := `
-		select id, feedurl, guid, link, title, content, author, readat, favourite, publishedat, createdat, updatedat from items order by readat is not null asc, coalesce(publishedat, createdat) %s;
+		select id, feedurl, guid, link, title, content, author, readat, favourite, publishedat, createdat, updatedat from items order by readat is not null asc, %s;
 	`
 
 	var stmt string
+	var timeStmt string
+
 	switch ordering {
+	case constants.LengthOrdering:
+		stmt = fmt.Sprintf(itemStmt, "length(content) asc")
 	case constants.DescendingOrdering:
-		stmt = fmt.Sprintf(itemStmt, constants.DescendingOrdering)
+		timeStmt = fmt.Sprintf("coalesce(publishedat, createdat) %s", constants.DescendingOrdering)
+		stmt = fmt.Sprintf(itemStmt, timeStmt)
 	default:
-		stmt = fmt.Sprintf(itemStmt, constants.DefaultOrdering)
+		timeStmt = fmt.Sprintf("coalesce(publishedat, createdat) %s", constants.DefaultOrdering)
+		stmt = fmt.Sprintf(itemStmt, timeStmt)
 	}
 
 	rows, err := sls.db.Query(stmt)

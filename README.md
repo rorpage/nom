@@ -100,8 +100,7 @@ autoread: true
 ```
 
 ### Ordering
-
-Set the default sort ordering of the list
+Set the default sort ordering of the list. Ordering can be one of "asc", "desc" or "length". Length will sort by article content length in ascending order, unread items still show at the top.
 
 ```yaml
 ordering: asc
