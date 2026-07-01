@@ -299,6 +299,25 @@ Available tags:
 - `x.y.z` / `x.y` - pinned release versions (e.g. `3.0.0`)
 - `sha-<short-sha>` - exact commit builds
 
+### Persisting the database
+
+The container has no `XDG_CONFIG_HOME`, so nom resolves the sqlite file relative to its working directory by default. To persist read state and cached articles across container restarts, mount a directory and point `database` at an absolute path inside it in your config:
+
+```yaml
+# my-nom-config.yml
+database: /data/nom.db
+```
+
+```sh
+mkdir -p nom-data
+docker run --rm -it \
+  -v $PWD/my-nom-config.yml:/app/docker-config.yml \
+  -v $PWD/nom-data:/data \
+  ghcr.io/guyfedwards/nom:master
+```
+
+Don't `touch` the db file yourself and bind-mount it directly - nom only runs its initial table setup when the file doesn't exist yet, so a pre-created empty file leaves the database schemaless.
+
 ## Dev setup
 
 You can use `backends-compose.yml` to spin up a local instance of [MiniFlux] and [FreshRSS] if needed for development.
