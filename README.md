@@ -280,6 +280,25 @@ Use the `-v` command line argument to mount a local configuration onto `/app/doc
 docker run --rm -it -v $PWD/my-nom-config.yml:/app/docker-config.yml nom
 ```
 
+## Running via pre-built container (ghcr.io)
+
+A container image is published to the GitHub Container Registry on every push to `master` and on each release tag.
+
+```sh
+docker run --rm -it ghcr.io/guyfedwards/nom:master
+```
+
+Mount your own config:
+
+```sh
+docker run --rm -it -v $PWD/my-nom-config.yml:/app/docker-config.yml ghcr.io/guyfedwards/nom:master
+```
+
+Available tags:
+- `master` - latest build from the main branch
+- `x.y.z` / `x.y` - pinned release versions (e.g. `3.0.0`)
+- `sha-<short-sha>` - exact commit builds
+
 ## Dev setup
 
 You can use `backends-compose.yml` to spin up a local instance of [MiniFlux] and [FreshRSS] if needed for development.
