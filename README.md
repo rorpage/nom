@@ -260,6 +260,8 @@ And you cannot combine simple keyword searches with any qualifiers:
 
 ## Building and Running via Docker
 
+> **Windows (Git Bash):** Git Bash rewrites `/app/...` paths in `-v` flags as if they were local Windows paths, which breaks volume mounts. Prefix `docker run` commands with `MSYS_NO_PATHCONV=1` to disable this, e.g. `MSYS_NO_PATHCONV=1 docker run --rm -it -v "$(pwd)/my-nom-config.yml":/app/docker-config.yml ghcr.io/guyfedwards/nom:master`.
+
 Build nom image
 
 ```sh
